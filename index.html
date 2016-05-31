@@ -50,7 +50,7 @@
                 data = jQuery.parseJSON( '{ "data": [{"name":"orsons"}] }' );
                 $.each(data["data"], function(index, value) {
                     var request = gapi.client.youtube.search.list({
-                        q: 'soundcloud.com/dyallas',
+                        q: '"soundcloud.com/dyallas"',
                         maxResults: 50,
                         part: 'snippet'
                     });
