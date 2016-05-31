@@ -19,6 +19,8 @@
     </section>
 
     <section class="main-content">
+
+
       <h3>
 <a id="welcome-to-github-pages" class="anchor" href="#welcome-to-github-pages" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Welcome to GitHub Pages.</h3>
 
@@ -40,9 +42,7 @@
 <p>You can <a href="https://help.github.com/articles/basic-writing-and-formatting-syntax/#mentioning-users-and-teams" class="user-mention">@mention</a> a GitHub username to generate a link to their profile. The resulting <code>&lt;a&gt;</code> element will link to the contributor’s GitHub Profile. For example: In 2007, Chris Wanstrath (<a href="https://github.com/defunkt" class="user-mention">@defunkt</a>), PJ Hyett (<a href="https://github.com/pjhyett" class="user-mention">@pjhyett</a>), and Tom Preston-Werner (<a href="https://github.com/mojombo" class="user-mention">@mojombo</a>) founded GitHub.</p>
 
 <h3>
-<a id="support-or-contact" class="anchor" href="#support-or-contact" aria-hidden="true"><span aria-hidden="true" class="octicon octicon-link"></span></a>Support or Contact</h3>
 
-<p>Having trouble with Pages? Check out our <a href="https://help.github.com/pages">documentation</a> or <a href="https://github.com/contact">contact support</a> and we’ll help you sort it out.</p>
 
       <footer class="site-footer">
         <span class="site-footer-owner"><a href="https://github.com/Dyalla/vlog">Vlog</a> is maintained by <a href="https://github.com/Dyalla">Dyalla</a>.</span>
@@ -53,5 +53,50 @@
     </section>
 
   
-  </body>
+
+<script src="//ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
+<script>
+
+function onLoadCallback() {
+    gapi.client.setApiKey("AIzaSyDgxrOnDN8zy9xlngag-7lMqkO8E6y4xq0");
+    console.log("API key loaded");
+    loadLib();
+}
+    
+ // After the API loads, call a function to enable the search box.
+function handleAPILoaded() {
+  $('#search-button').attr('disabled', false);
+}
+
+function loadLib() {
+    gapi.client.load('youtube', 'v3', function() {
+      data = jQuery.parseJSON( '{ "data": [{"name":"orsons"}] }' );
+      $.each(data["data"], function(index, value) {
+        makeRequest(value["name"]);
+      });
+    });
+    
+    search();
+}
+    
+// Search for a specified string.
+function search() {
+  var q = "dyallas";
+  var request = gapi.client.youtube.search.list({
+    q: q,
+    maxResults: 50,
+    part: 'snippet'
+  });
+
+  request.execute(function(response) {
+    var str = JSON.stringify(response.result);
+    console.log(str);
+    //$('#search-container').html('<pre>' + str + '</pre>');
+  });
+}
+
+	</script> 
+    <script src="//apis.google.com/js/client.js?onload=onLoadCallback"></script>
+
+   </body>
 </html>
