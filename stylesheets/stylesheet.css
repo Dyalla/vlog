@@ -1,3 +1,7 @@
+.video {
+    float: left;
+}
+
 * {
   box-sizing: border-box; }
 

@@ -19,9 +19,11 @@
         <h1 class="project-name">Vlog</h1>
         <h2 class="project-tagline">Musician in the digital age</h2>
 
-
-
     </section>
+
+    <div id="videos">
+        
+    </div>
     
     <!-- JQuery -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script> 
@@ -30,47 +32,48 @@
     <!-- YT script -->
     <script>
 
+        // The tits
+        var videos = [];
+        
         function onLoadCallback() {
             gapi.client.setApiKey("AIzaSyDgxrOnDN8zy9xlngag-7lMqkO8E6y4xq0");
             console.log("API key loaded");
-            loadLib();
-        }
-
-        // After the API loads, call a function to enable the search box.
-        function handleAPILoaded() {
-            $('#search-button').attr('disabled', false);
-        }
-
-        function loadLib() {
+            
+            // Load lib
             gapi.client.load('youtube', 'v3', function() {
                 data = jQuery.parseJSON( '{ "data": [{"name":"orsons"}] }' );
                 $.each(data["data"], function(index, value) {
-                    makeRequest(value["name"]);
+                    var request = gapi.client.youtube.search.list({
+                        q: 'soundcloud.com/dyallas',
+                        maxResults: 50,
+                        part: 'snippet'
+                    });
+                    
+                    
+                    request.execute(function(response) {
+                        var items = response.result.items;
+                        
+                        // Store the video objects
+                        jQuery.each(items, function(i, item) {                            
+                            var video = new Object();
+                            video.id = item.id.videoId;
+                            video.title = item.snippet.title,
+                            video.image = item.snippet.thumbnails.high.url;
+                            
+                            videos.push(video);
+                        });
+                        
+                        // Populate the page
+                        jQuery.each(videos, function(i, video) {
+                            var vidCode = $('<div class="video"><h3>'+video.title+'</h3><a href="https://www.youtube.com/watch?v='+video.id+'"><img src="'+video.image+'"></a></div>');
+                            $('#videos').append(vidCode);
+                        });
+                    });
                 });
             });
-
-            search();
         }
-
-        // Search for a specified string.
-        function search() {
-            var q = "dyallas";
-            var request = gapi.client.youtube.search.list({
-                q: q,
-                maxResults: 50,
-                part: 'snippet'
-            });
-
-            request.execute(function(response) {
-                var str = JSON.stringify(response.result);
-                console.log(str);
-                //$('#search-container').html('<pre>' + str + '<\/pre>');
-            });
-        }
-
+        
     </script> 
-
-           
 
     <script src="//apis.google.com/js/client.js?onload=onLoadCallback"></script>
     
