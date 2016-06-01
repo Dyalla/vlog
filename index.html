@@ -12,25 +12,37 @@
     type="text/css">
     <link href="stylesheets/github-light.css" media="screen" rel="stylesheet"
     type="text/css">
+    <link rel="stylesheet" type="text/css" href="simplegrid.css" />
 </head>
 <body>
     <section class="page-header">
 
         <h1 class="project-name">Vlog</h1>
         <h2 class="project-tagline">Musician in the digital age</h2>
-
-
-<h3 class="project-tagline">The digital age provides opportunities for creative collaboration like never before.</h3>
-
-
-
+        <h3 class="project-tagline">The digital age provides opportunities for creative collaboration like never before.</h3>
 
     </section>
-
+<!-- Grid 1/3 -->
+		<div class="grid grid-pad">
+			<div class="col-1-3 mobile-col-1-3">
+				<div id="videos">
+				</div>
+			</div>
+			<div class="col-1-3 mobile-col-1-3">
+				<div id="videos">
+				</div>
+			</div>
+			<div class="col-1-3 mobile-col-1-3">
+				<div id="videos">
+				</div>
+			</div>
+		</div>
+<!--
     <div id="videos">
         
     </div>
     
+-->
     <!-- JQuery -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script> 
     
@@ -64,7 +76,7 @@
                             var video = new Object();
                             video.id = item.id.videoId;
                             video.title = item.snippet.title,
-                            video.image = item.snippet.thumbnails.high.url;
+                            video.image = item.snippet.thumbnails.medium.url;
                             
                             videos.push(video);
                         });
