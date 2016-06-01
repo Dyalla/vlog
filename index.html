@@ -19,6 +19,7 @@
 
         <h1 class="project-name">Vlog</h1>
         <h2 class="project-tagline">Musician in the digital age</h2>
+<<<<<<< HEAD
         <h3 class="project-tagline">The digital age provides opportunities for creative collaboration like never before.</h3>
 
     </section>
@@ -38,19 +39,37 @@
 			</div>
 		</div>
 <!--
+=======
+
+
+        <h3 class="project-tagline">The digital age provides opportunities for creative collaboration like never before.</h3>
+
+    </section>
+    
+    <section id="graph">
+        <canvas id="newVideos" width="523" height="150" style="width: 523px; height: 261px;"></canvas>
+    </section>
+
+>>>>>>> origin/gh-pages
     <div id="videos">
         
     </div>
     
 -->
     <!-- JQuery -->
-    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script> 
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
     
+    <!-- Chart.js -->
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.0.1/Chart.min.js"></script>
 
+    
+    <!-- Moment.js -->
+    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.13.0/moment.min.js"></script>
+    
     <!-- YT script -->
     <script>
 
-        // The tits
+        // The videos
         var videos = [];
         
         function onLoadCallback() {
@@ -59,38 +78,167 @@
             
             // Load lib
             gapi.client.load('youtube', 'v3', function() {
-                data = jQuery.parseJSON( '{ "data": [{"name":"orsons"}] }' );
-                $.each(data["data"], function(index, value) {
+                var hasNextPage = true;
+                var nextPageToken = '';
+                //while (hasNextPage) {
+                    console.log("Starting loop");
                     var request = gapi.client.youtube.search.list({
                         q: '"soundcloud.com/dyallas"',
                         maxResults: 50,
+                        pageToken: nextPageToken,
                         part: 'snippet'
                     });
                     
-                    
                     request.execute(function(response) {
+                        console.log("Executing request with pageToken: " + nextPageToken);
                         var items = response.result.items;
+                        console.log("Numebr of YT videos: " + items.length);
                         
+                        nextPageToken = response.nextPageToken;
+                        if (items.length < 50) hasNextPage = false;
+
                         // Store the video objects
-                        jQuery.each(items, function(i, item) {                            
+                        jQuery.each(items, function(i, item) {                               
                             var video = new Object();
                             video.id = item.id.videoId;
                             video.title = item.snippet.title,
+<<<<<<< HEAD
                             video.image = item.snippet.thumbnails.medium.url;
                             
+=======
+                            video.image = item.snippet.thumbnails.high.url;
+                            video.date = item.snippet.publishedAt;
+
+>>>>>>> origin/gh-pages
                             videos.push(video);
                         });
-                        
-                        // Populate the page
-                        jQuery.each(videos, function(i, video) {
-                            var vidCode = $('<div class="video"><h3>'+video.title+'</h3><a href="https://www.youtube.com/watch?v='+video.id+'"><img src="'+video.image+'"></a></div>');
-                            $('#videos').append(vidCode);
-                        });
                     });
+                //}
+
+                // Load the new videos
+                window.setTimeout(getResults, 1000);
+            });
+        }
+        
+        // Add youtube videos to videos array
+        function getResults(pageToken) {
+            var hasNextPage = true;
+            var nextPageToken = pageToken;
+            
+            // Load lib
+            gapi.client.load('youtube', 'v3', function() {
+                
+                var request = gapi.client.youtube.search.list({
+                    q: '"soundcloud.com/dyallas"',
+                    maxResults: 50,
+                    pageToken: nextPageToken,
+                    part: 'snippet'
+                });
+
+                request.execute(function(response) {
+                    console.log("Executing request with pageToken: " + nextPageToken);
+                    var items = response.result.items;
+                    console.log("Numebr of YT videos: " + items.length);
+
+                    nextPageToken = response.nextPageToken;
+                    if (items.length < 50) hasNextPage = false;
+
+                    // Store the video objects
+                    jQuery.each(items, function(i, item) {                               
+                        var video = new Object();
+                        video.id = item.id.videoId;
+                        video.title = item.snippet.title,
+                        video.image = item.snippet.thumbnails.high.url;
+                        video.date = item.snippet.publishedAt;
+
+                        videos.push(video);
+                    });
+                    
+                    // Load more videos
+                    if (hasNextPage && nextPageToken != null) {
+                        window.setTimeout(getResults(nextPageToken), 1000);
+                    } else {
+                        loadGraph();
+                    }
                 });
             });
         }
         
+        // Load the new videos graph
+        function loadGraph() {
+            // Populate the page
+            jQuery.each(videos, function(i, video) {
+                var vidCode = $('<div class="video"><h3>'+video.title+'</h3><a href="https://www.youtube.com/watch?v='+video.id+'"><img src="'+video.image+'"></a></div>');
+                $('#videos').append(vidCode);
+            });
+            
+            var videoDates = [];
+            var videoCount = [];
+            
+            // Find earliest and latest dates
+            var firstDate = moment();
+            var lastDate = moment("2014"); // Way before
+            jQuery.each(videos, function(i, video) {
+                // Make the moment date object
+                var date = moment(video.date).startOf('day');
+                
+                // If earlier, set it
+                if (date.isBefore(firstDate)) firstDate = date;
+                
+                // If later, set it
+                if (date.isAfter(lastDate)) lastDate = date;
+            });
+            
+            console.log("First date: " + firstDate.format("Do MMMM YYYY"));
+            console.log("Last date: " + lastDate.format("Do MMMM YYYY"));
+            
+            // For each day from first day
+            //format("dddd, MMMM Do YYYY");
+            var curDate = firstDate;
+            for (; curDate.isSameOrBefore(lastDate); curDate.add(1, 'day')) {
+                // Count num of vids for this day
+                var count = 0;
+                jQuery.each(videos, function(i, video) {
+                    if (moment(video.date).startOf('day').isSame(curDate)) count++;
+                });
+                
+                // Add date to dates array
+                //console.log(curDate.format("Do MMMM YYYY"));
+                videoDates.push(curDate.format("Do MMMM YYYY"));
+                
+                // Add count to counts array
+                //console.log(count);
+                videoCount.push(count);
+            }
+            
+            // Format the data
+            var data = Object();
+            data.labels = videoDates;
+            data.datasets = Object();
+            data.datasets.label = "Views";
+            data.datasets.fill = false;
+            data.datasets.borderColor = "#8a6d3b";
+            data.datasets.data = videoCount;
+            
+            var ctx = document.getElementById("newVideos");
+            var myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: videoDates,
+                    datasets: [{
+                        label: 'Number of New Videos',
+                        data: videoCount
+                    }]
+                }
+            });
+            
+            // Sum of count array
+            var total = 0;
+            $.each(videoCount,function() {
+                total += this;
+            });
+            console.log("Number of videos in graph: " + total);
+        }
     </script> 
 
     <script src="//apis.google.com/js/client.js?onload=onLoadCallback"></script>
