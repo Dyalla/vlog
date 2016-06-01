@@ -24,10 +24,10 @@
     <section id="graph">
         <canvas id="newVideos" width="523" height="150" style="width: 523px; height: 261px;"></canvas>
     </section>
-    <section>
+  
 				<div id="videos">
 				</div>
-    </section>
+ 
 
     <!-- JQuery -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
@@ -110,7 +110,7 @@
                 request.execute(function(response) {
                     console.log("Executing request with pageToken: " + nextPageToken);
                     var items = response.result.items;
-                    console.log("Numebr of YT videos: " + items.length);
+                    console.log("Number of YT videos: " + items.length);
 
                     nextPageToken = response.nextPageToken;
                     if (items.length < 50) hasNextPage = false;
@@ -140,9 +140,11 @@
         function loadGraph() {
             
             // Populate the page
-            
+//            console.log("loading first 50");
             jQuery.each(videos, function(i, video) {
-                var vidCode = $('<div class="video"><h4>'+video.title+'</h4><a href="https://www.youtube.com/watch?v='+video.id+'"><img src="'+video.image+'"></a></div>');
+                
+                var vidCode = $('<div class="video"><h3>'+video.title+'</h3><a href="https://www.youtube.com/watch?v='+video.id+'"><img src="'+video.image+'"></a></div>');
+                
                 $('#videos').append(vidCode);
             });
             
