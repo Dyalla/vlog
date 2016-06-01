@@ -1,12 +1,13 @@
-
-
-/*
-.video {
-margin-left:100px;
-display: grid;
- 
+.tidy{
+ text-align: center;
 }
-*/
+
+
+.video {
+  display: inline-block;
+    margin: 10px;
+}
+
 
 
 
