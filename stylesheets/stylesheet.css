@@ -1,12 +1,12 @@
+
+
 .video {
-margin-left:100%;
+margin-left:100px;
 display: grid;
  
 }
 
-.title{
-   float: left;
-}
+
 
 * {
   box-sizing: border-box; }
@@ -67,7 +67,9 @@ a {
   color: #fff;
   text-align: center;
   background-color: #159957;
-  background-image: 'src="Dyalla Zombified.jpeg"' }
+  background-image: url("img/zombie.jpg");
+  background-size: 100%;
+}
 
 @media screen and (min-width: 64em) {
   .page-header {

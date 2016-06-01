@@ -12,50 +12,23 @@
     type="text/css">
     <link href="stylesheets/github-light.css" media="screen" rel="stylesheet"
     type="text/css">
-    <link rel="stylesheet" type="text/css" href="stylesheets/simplegrid.css" />
+<!--    <link rel="stylesheet" type="text/css" href="stylesheets/simplegrid.css" />-->
 </head>
 <body>
     <section class="page-header">
-
         <h1 class="project-name">Vlog</h1>
         <h2 class="project-tagline">Musician in the digital age</h2>
-
-
-
-        <h3 class="project-tagline">The digital age provides opportunities for creative collaboration like never before.</h3>
-
+        <h3 class="project-tagline">The digital age provides opportunities for creative collaboration like never before.</h3>        
     </section>
     
     <section id="graph">
         <canvas id="newVideos" width="523" height="150" style="width: 523px; height: 261px;"></canvas>
     </section>
-
-
-        <h3 class="project-tagline">The digital age provides opportunities for creative collaboration like never before.</h3>
-
-<!--    </section>-->
-<!-- Grid 1/3 -->
-		<div class="grid grid-pad">
-			<div class="col-1-3 mobile-col-1-3">
+    <section>
 				<div id="videos">
 				</div>
-			</div>
-			<div class="col-1-3 mobile-col-1-3">
-				<div id="videos">
-				</div>
-			</div>
-			<div class="col-1-3 mobile-col-1-3">
-				<div id="videos">
-				</div>
-			</div>
-		</div>
-<!--
+    </section>
 
-    <div id="videos">
-        
-    </div>
-    
--->
     <!-- JQuery -->
     <script src="//ajax.googleapis.com/ajax/libs/jquery/2.2.2/jquery.min.js"></script>
     
@@ -165,9 +138,11 @@
         
         // Load the new videos graph
         function loadGraph() {
+            
             // Populate the page
+            
             jQuery.each(videos, function(i, video) {
-                var vidCode = $('<div class="video"><h3>'+video.title+'</h3><a href="https://www.youtube.com/watch?v='+video.id+'"><img src="'+video.image+'"></a></div>');
+                var vidCode = $('<div class="video"><h4>'+video.title+'</h4><a href="https://www.youtube.com/watch?v='+video.id+'"><img src="'+video.image+'"></a></div>');
                 $('#videos').append(vidCode);
             });
             
